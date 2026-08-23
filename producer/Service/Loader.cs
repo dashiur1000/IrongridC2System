@@ -1,6 +1,7 @@
 ﻿using producer.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -15,8 +16,13 @@ namespace producer.Service
             var str = File.ReadAllText(json);
             try
             {
-                var file = JsonSerializer.Deserialize<List<LiveStatus>>(str);
-                return file;
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var file = JsonSerializer.Deserialize<List<LiveStatus>>(str, options);
+                return file ?? new List<LiveStatus>();
             }
             catch
             {
