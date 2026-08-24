@@ -44,8 +44,7 @@ docker exec -it broker bash
 /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 ```
-/opt/kafka/bin/kafka-console-consumer.sh --topic PerimeterSensor-topic --bootstrap-server localhost:9092
- --from-beginning
+/opt/kafka/bin/kafka-console-consumer.sh --topic PerimeterSensor-topic --bootstrap-server localhost:9092 --from-beginning
 ```
 ctrl+c
 ```
