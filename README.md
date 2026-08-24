@@ -35,7 +35,7 @@ exit;
 cd producer
 ```
 ```
-cd producer
+dotnet run
 ```
 ```
 docker exec -it broker bash
