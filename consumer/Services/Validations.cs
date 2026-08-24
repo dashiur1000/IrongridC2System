@@ -1,4 +1,8 @@
-﻿using consumer.Models;
+﻿
+
+
+
+using consumer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +15,20 @@ namespace consumer.Services
     {
         public List<string> ValidUAV(LiveStatus json)
         {
-            int value = Convert.ToInt32(json.rawValue);
             var list = new List<string>();
+
+            if (!int.TryParse(json.rawValue, out int value))
+            {
+                list.Add("false");
+                return list;
+            }
+
             if (value >= 20 && value <= 100)
             {
                 list.Add("true");
                 return list;
             }
-            if (value >= 0)
+            else if (value >= 0 && value <= 19)
             {
                 list.Add("nini");
                 return list;
@@ -29,15 +39,18 @@ namespace consumer.Services
                 return list;
             }
         }
+
         public List<string> ValidPerimeter(LiveStatus json)
         {
             var list = new List<string>();
-            if (json.rawValue?.ToLower() == "good")
+            var raw = json.rawValue?.Trim().ToLower();
+
+            if (raw == "good" || raw == "gud")
             {
                 list.Add("true");
                 return list;
             }
-            if (json.rawValue?.ToLower() == "bad")
+            else if (raw == "bad" || raw == "bed")
             {
                 list.Add("nini");
                 return list;

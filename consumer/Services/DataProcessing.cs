@@ -12,10 +12,12 @@ namespace consumer.Services
     public class DataProcessing
     {
         private readonly consumerDbContext _consumerDbContext;
+
         public DataProcessing(consumerDbContext consumerDbContext)
         {
             _consumerDbContext = consumerDbContext;
         }
+
         public bool LiveStatusToDb(string model, List<string> valid)
         {
             var c = JsonSerializer.Deserialize<LiveStatus>(model);
@@ -23,14 +25,16 @@ namespace consumer.Services
             {
                 return false;
             }
+
             string ProcessedStatus = string.Empty;
             bool IsVerified = false;
+
             if (valid.Contains("true"))
             {
                 ProcessedStatus = "Stable";
                 IsVerified = true;
             }
-            if(valid.Contains("nini"))
+            else if (valid.Contains("nini"))
             {
                 ProcessedStatus = "Warning";
                 IsVerified = true;
@@ -40,57 +44,92 @@ namespace consumer.Services
                 ProcessedStatus = "Warning";
                 IsVerified = false;
             }
-            var status = new AssetLiveStatus()
+
+            var existingStatus = _consumerDbContext.AssetLiveStatus
+                .FirstOrDefault(x => x.assetId == c.assetId);
+
+            if (existingStatus != null)
             {
-                assetId = c.assetId,
-                assetType = c.assetType,
-                rawValue = c.rawValue,
-                ProcessedStatus = ProcessedStatus,
-                IsVerified = IsVerified,
-                LastUpdate = DateTime.Now
-            };
-            _consumerDbContext.AssetLiveStatus.Add(status);
+                existingStatus.assetType = c.assetType;
+                existingStatus.rawValue = c.rawValue;
+                existingStatus.ProcessedStatus = ProcessedStatus;
+                existingStatus.IsVerified = IsVerified;
+                existingStatus.LastUpdate = DateTime.Now;
+            }
+            else
+            {
+                var newStatus = new AssetLiveStatus()
+                {
+                    assetId = c.assetId,
+                    assetType = c.assetType,
+                    rawValue = c.rawValue,
+                    ProcessedStatus = ProcessedStatus,
+                    IsVerified = IsVerified,
+                    LastUpdate = DateTime.Now
+                };
+                _consumerDbContext.AssetLiveStatus.Add(newStatus);
+            }
+
             _consumerDbContext.SaveChanges();
             return true;
         }
-        public List<string> ValidUAV(LiveStatus json)
+        public bool LiveStatusToDbPerimeter(string model, List<string> valid)
         {
-            int value = Convert.ToInt32(json.rawValue);
-            var list = new List<string>();
-            if (value >= 20 && value <= 100)
+            var c = JsonSerializer.Deserialize<LiveStatus>(model);
+            if (c == null)
             {
-                list.Add("true");
-                return list;
+                return false;
             }
-            if(value >= 0)
+            string? Normalization = string.Empty;
+            string ProcessedStatus = string.Empty;
+            bool IsVerified = false;
+
+            if (valid.Contains("true"))
             {
-                list.Add("nini");
-                return list;
+                Normalization = "Good";
+                ProcessedStatus = "Stable";
+                IsVerified = true;
+            }
+            else if (valid.Contains("nini"))
+            {
+                Normalization = "Bad";
+                ProcessedStatus = "Warning";
+                IsVerified = true;
             }
             else
             {
-                list.Add("false");
-                return list;
+                Normalization = c.rawValue;
+                ProcessedStatus = "Warning";
+                IsVerified = false;
             }
-        }
-        public List<string> ValidPerimeter(LiveStatus json)
-        {
-            var list = new List<string>();
-            if(json.rawValue?.ToLower() == "good")
+
+            var existingStatus = _consumerDbContext.AssetLiveStatus
+                .FirstOrDefault(x => x.assetId == c.assetId);
+
+            if (existingStatus != null)
             {
-                list.Add("true");
-                return list;
-            }
-            if (json.rawValue?.ToLower() == "bad")
-            {
-                list.Add("nini");
-                return list;
+                existingStatus.assetType = c.assetType;
+                existingStatus.rawValue = Normalization;
+                existingStatus.ProcessedStatus = ProcessedStatus;
+                existingStatus.IsVerified = IsVerified;
+                existingStatus.LastUpdate = DateTime.Now;
             }
             else
             {
-                list.Add("false");
-                return list;
+                var newStatus = new AssetLiveStatus()
+                {
+                    assetId = c.assetId,
+                    assetType = c.assetType,
+                    rawValue = Normalization,
+                    ProcessedStatus = ProcessedStatus,
+                    IsVerified = IsVerified,
+                    LastUpdate = DateTime.Now
+                };
+                _consumerDbContext.AssetLiveStatus.Add(newStatus);
             }
+
+            _consumerDbContext.SaveChanges();
+            return true;
         }
     }
 }
