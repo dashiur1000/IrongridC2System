@@ -5,11 +5,11 @@ namespace IronGridAPI.Controllers
 {
     [ApiController]
     [Route("api/assets-status")]
-    public class assetsStatusController : ControllerBase
+    public class AssetsStatusController : ControllerBase
     {
-        private readonly AssetsStatusRepo _repository;
+        private readonly IAssetsStatusRepo _repository;
 
-        public assetsStatusController(AssetsStatusRepo repository)
+        public AssetsStatusController(IAssetsStatusRepo repository)
         {
             _repository = repository;
         }

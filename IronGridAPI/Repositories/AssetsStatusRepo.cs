@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IronGridAPI.Repositories
 {
-    public class AssetsStatusRepo
+    public class AssetsStatusRepo : IAssetsStatusRepo
     {
         private readonly IronGridDbContext _context;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IronGridAPI.Repositories
 {
-    public class AssetsRepo
+    public class AssetsRepo : IAssetsRepo
     {
         private readonly IronGridDbContext _dbContext;
         public AssetsRepo(IronGridDbContext dbContext)
@@ -15,7 +15,6 @@ namespace IronGridAPI.Repositories
         }
         public async Task<AssetDto> GetBYIdAsync(int id)
         {
-            //return await _dbContext.Assets.FindAsync(id);
             var result = _dbContext.Assets.FirstOrDefault(a => a.Id == id);
             if (result == null)
             {

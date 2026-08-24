@@ -8,8 +8,8 @@ namespace IronGridAPI.Controllers
     [Route("api/reports")]
     public class OperationsReportsController : ControllerBase
     {
-        private readonly OperationsReportsRepo _repo;
-        public OperationsReportsController(OperationsReportsRepo repo)
+        private readonly IOperationsReportsRepo _repo;
+        public OperationsReportsController(IOperationsReportsRepo repo)
         {
             _repo = repo;
         }

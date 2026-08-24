@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IronGridAPI.Repositories
 {
-    public class OperationsReportsRepo
+    public class OperationsReportsRepo : IOperationsReportsRepo
     {
         private readonly IronGridDbContext _context;
         public OperationsReportsRepo(IronGridDbContext context)
@@ -16,13 +16,13 @@ namespace IronGridAPI.Repositories
             return await _context.AssetLiveStatus
                 .Where(a => (a.ProcessedStatus == "Warning" || a.IsVerified == false))
                 .Include(a => a.Asset)
-                .ThenInclude(a => a.Unit)
+                .ThenInclude(b => b.Unit)
                 .Select(a => new CriticalAssetsDto
                 {
                     assetId = a.assetId,
                     assetSerial = a.rawValue,
                     assetType = a.assetType,
-                    unitName = a.Asset.Unit.UnitName,
+                    unitName = a.Asset.Unit.UnitName.ToString(),
                     sector = a.Asset.Unit.Sector,
                     ProcessedStatus = a.ProcessedStatus,
                     IsVerified = a.IsVerified,

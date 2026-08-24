@@ -7,11 +7,11 @@ namespace IronGridAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class assetsController :ControllerBase
+    public class AssetsController :ControllerBase
     {
-        private readonly AssetsRepo _repo;
+        private readonly IAssetsRepo _repo;
 
-        public assetsController(AssetsRepo repo)
+        public AssetsController(IAssetsRepo repo)
         {
             _repo = repo;
         }
