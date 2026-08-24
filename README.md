@@ -79,3 +79,13 @@ select * from AssetLiveStatus;
 ```
 exit;
 ```
+### הפעלת API
+```
+cd ..
+```
+```
+cd .\IronGridAPI\
+```
+```
+dotnet watch run
+```

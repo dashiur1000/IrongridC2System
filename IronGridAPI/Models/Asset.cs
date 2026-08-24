@@ -6,6 +6,7 @@
         public int UnitId { get; set; }
         public string? AssetSerial { get; set; }
         public string? AssetType { get; set; }
+        public ICollection<AssetLiveStatus>? AssetLives { get; set; }
         public Units? Unit { get; set; }
     }
 }

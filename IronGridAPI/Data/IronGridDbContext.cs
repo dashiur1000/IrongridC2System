@@ -1,5 +1,6 @@
 ﻿using IronGridAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace IronGridAPI.Data
 {
@@ -26,7 +27,6 @@ namespace IronGridAPI.Data
                 .WithMany(a => a.Assets);
             modelBuilder.Entity<AssetLiveStatus>()
                 .HasKey(a => a.assetId);
-
         }
     }
 }
