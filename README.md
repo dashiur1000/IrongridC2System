@@ -48,8 +48,7 @@ docker exec -it broker bash
 ```
 ctrl+c
 ```
-opt/kafka/bin/kafka-console-consumer.sh --topic UAV-topic --bootstrap-server localhost:9092 --from-begi
-nning
+opt/kafka/bin/kafka-console-consumer.sh --topic UAV-topic --bootstrap-server localhost:9092 --from-beginning
 ```
 ctrl+c
 ```
