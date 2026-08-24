@@ -9,7 +9,7 @@ docker compose up -d
 docker ps
 ```
 ```
-et-Content seed_database.sql | docker exec -i db mysql -uroot -proot testDb
+get-Content seed_database.sql | docker exec -i db mysql -uroot -proot testDb
 ```
 ### צפייה ב-mysql
 ```
