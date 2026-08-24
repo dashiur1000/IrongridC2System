@@ -49,13 +49,12 @@ namespace IronGridAPI.Controllers
             return Ok(newAsset);
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAsset(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _repo.deleteAsset(id);
-            if(!result)
-            {
-                return NotFound();
-            }
+            var existing = await _repo.GetBYIdAsync(id);
+            if (existing == null) return NotFound();
+
+            await _repo.deleteAsset(id);
             return NoContent();
         }
     }

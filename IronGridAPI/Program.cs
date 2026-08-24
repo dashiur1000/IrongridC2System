@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<IronGridDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddScoped<AssetsRepo>();
+builder.Services.AddScoped<AssetsStatusRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

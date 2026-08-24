@@ -13,21 +13,22 @@ namespace IronGridAPI.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<AssetDto> GetBYIdAsync(int id)
+        public async Task<Asset> GetBYIdAsync(int id)
         {
-            var result = _dbContext.Assets.FirstOrDefault(a => a.Id == id);
-            if (result == null)
-            {
-                return null;
-            }
-            var dto = new AssetDto
-            {
-                Id = id,
-                UnitId = result.UnitId,
-                AssetSerial = result.AssetSerial,
-                AssetType = result.AssetType,
-            };
-            return dto;
+            return await _dbContext.Assets.FindAsync(id);
+            //var result = _dbContext.Assets.FirstOrDefault(a => a.Id == id);
+            //if (result == null)
+            //{
+            //    return null;
+            //}
+            //var dto = new AssetDto
+            //{
+            //    Id = id,
+            //    UnitId = result.UnitId,
+            //    AssetSerial = result.AssetSerial,
+            //    AssetType = result.AssetType,
+            //};
+            //return dto;
         }
         public async Task<Units> AddUnitAsync(UnitToCreateDto unit)
         {
@@ -68,16 +69,14 @@ namespace IronGridAPI.Repositories
             await _dbContext.SaveChangesAsync();
             return result;
         }
-        public async Task<bool> deleteAsset(int id)
+        public async Task deleteAsset(int id)
         {
-            var result = _dbContext.Assets.FirstOrDefault(a => a.Id == id);
-            if (result == null)
+            var asset = await GetBYIdAsync(id);
+            if (asset != null)
             {
-                return false;
+                _dbContext.Assets.Remove(asset);
+                await _dbContext.SaveChangesAsync();
             }
-            _dbContext.Assets.Remove(result);
-            await _dbContext.SaveChangesAsync();
-            return true;
         }
     }
 }
